@@ -1,3 +1,20 @@
+// The Go language does not support ternary expressions. That means that you have to write quite some boilerplate code to achieve the same:
+//
+//	var result TYPE
+//	if condition {
+//		result = trueResult
+//	} else {
+//		result = falseResult
+//	}
+//
+// This package allows you to do the same with just a single line.
+// To allow Go to infer the generic type, ternary expressions need to be written as in Python: "trueResult if condition else falseResult":
+//
+//	result := Return(trueResult).When(condition).Else(falseResult)
+//
+// The above requires the values to be eagerly evaluated. [Call] and [Condition.ElseCall] can be used instead to support lazy evaluation:
+//
+//	result := Return(trueResult).When(condition).ElseCall(func() TYPE { ... })
 package ternary
 
 // TrueResult represents the result of a ternary expression if the condition is true.
@@ -25,7 +42,7 @@ func (c Condition[T]) Else(value T) T {
 }
 
 // ElseCall specifies the result of a ternary expression if the condition is false.
-// Unlike Else the result is evaluated lazily.
+// Unlike [Condition.Else] the result is evaluated lazily.
 func (c Condition[T]) ElseCall(fn func() T) T {
 	if c.condition {
 		return c.trueResult()
@@ -39,7 +56,7 @@ func Return[T any](value T) TrueResult[T] {
 }
 
 // Call starts a ternary expression. It comes in the same format as Python, as "true if condition else false", to allow the result type to be inferred.
-// Unlike Return the result is evaluated lazily.
+// Unlike [Return] the result is evaluated lazily.
 func Call[T any](fn func() T) TrueResult[T] {
 	return TrueResult[T]{fn}
 }

@@ -2,7 +2,7 @@
 
 A simple implementation of ternary expressions in Go.
 
-Go itself does not support ternary expressions. That means that you have to write quite some boilerplate code to achieve the same:
+The Go language does not support ternary expressions. That means that you have to write quite some boilerplate code to achieve the same:
 
 ```go
 var result TYPE
