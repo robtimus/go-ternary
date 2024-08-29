@@ -1,4 +1,8 @@
 # go-ternary
+[![Build Status](https://github.com/robtimus/go-ternary/actions/workflows/build.yml/badge.svg)](https://github.com/robtimus/go-ternary/actions/workflows/build.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=robtimus%3Ago-ternary&metric=alert_status)](https://sonarcloud.io/summary/overall?id=robtimus%3Ago-ternary)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=robtimus%3Ago-ternary&metric=coverage)](https://sonarcloud.io/summary/overall?id=robtimus%3Ago-ternary)
+[![Known Vulnerabilities](https://snyk.io/test/github/robtimus/go-ternary/badge.svg)](https://snyk.io/test/github/robtimus/go-ternary)
 
 A simple implementation of ternary expressions in Go.
 
