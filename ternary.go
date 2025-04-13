@@ -1,5 +1,16 @@
 package ternary
 
+// Return starts a ternary expression. It comes in the same format as Python, as "true if condition else false", to allow the result type to be inferred.
+func Return[T any](value T) TrueResult[T] {
+	return TrueResult[T]{func() T { return value }}
+}
+
+// Call starts a ternary expression. It comes in the same format as Python, as "true if condition else false", to allow the result type to be inferred.
+// Unlike [Return] the result is evaluated lazily.
+func Call[T any](fn func() T) TrueResult[T] {
+	return TrueResult[T]{fn}
+}
+
 // TrueResult represents the result of a ternary expression if the condition is true.
 type TrueResult[T any] struct {
 	result func() T
@@ -31,15 +42,4 @@ func (c Condition[T]) ElseCall(fn func() T) T {
 		return c.trueResult()
 	}
 	return fn()
-}
-
-// Return starts a ternary expression. It comes in the same format as Python, as "true if condition else false", to allow the result type to be inferred.
-func Return[T any](value T) TrueResult[T] {
-	return TrueResult[T]{func() T { return value }}
-}
-
-// Call starts a ternary expression. It comes in the same format as Python, as "true if condition else false", to allow the result type to be inferred.
-// Unlike [Return] the result is evaluated lazily.
-func Call[T any](fn func() T) TrueResult[T] {
-	return TrueResult[T]{fn}
 }
