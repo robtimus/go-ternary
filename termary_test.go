@@ -54,10 +54,12 @@ func TestTernaryWithLazyEvaluation(t *testing.T) {
 			if actual != expected {
 				t.Errorf("expected: %d, actual: %d", expected, actual)
 			}
+
 			if condition {
 				if trueFunc.invoked != 1 {
 					t.Errorf("expected true func to be invoked once, actual: %d", trueFunc.invoked)
 				}
+
 				if falseFunc.invoked != 0 {
 					t.Errorf("expected false func to not be invoked, actual: %d", falseFunc.invoked)
 				}
@@ -65,6 +67,7 @@ func TestTernaryWithLazyEvaluation(t *testing.T) {
 				if trueFunc.invoked != 0 {
 					t.Errorf("expected true func to not be invoked, actual: %d", trueFunc.invoked)
 				}
+
 				if falseFunc.invoked != 1 {
 					t.Errorf("expected false func to be invoked once, actual: %d", falseFunc.invoked)
 				}
@@ -96,9 +99,11 @@ func TestTernaryWithLazyTrueEvaluation(t *testing.T) {
 			if actual != expected {
 				t.Errorf("expected: %d, actual: %d", expected, actual)
 			}
+
 			if condition && trueFunc.invoked != 1 {
 				t.Errorf("expected true func to be invoked once, actual: %d", trueFunc.invoked)
 			}
+
 			if !condition && trueFunc.invoked != 0 {
 				t.Errorf("expected true func to not be invoked, actual: %d", trueFunc.invoked)
 			}
@@ -129,9 +134,11 @@ func TestTernaryWithLazyFalseEvaluation(t *testing.T) {
 			if actual != expected {
 				t.Errorf("expected: %d, actual: %d", expected, actual)
 			}
+
 			if condition && falseFunc.invoked != 0 {
 				t.Errorf("expected false func to not be invoked, actual: %d", falseFunc.invoked)
 			}
+
 			if !condition && falseFunc.invoked != 1 {
 				t.Errorf("expected false func to be invoked once, actual: %d", falseFunc.invoked)
 			}
@@ -146,5 +153,6 @@ type function[T any] struct {
 
 func (f *function[T]) Invoke() T {
 	f.invoked++
+
 	return f.result
 }

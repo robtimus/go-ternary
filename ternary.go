@@ -32,6 +32,7 @@ func (c Condition[T]) Else(value T) T {
 	if c.condition {
 		return c.trueResult()
 	}
+
 	return value
 }
 
@@ -41,5 +42,6 @@ func (c Condition[T]) ElseCall(fn func() T) T {
 	if c.condition {
 		return c.trueResult()
 	}
+
 	return fn()
 }
