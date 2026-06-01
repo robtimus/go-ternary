@@ -47,32 +47,38 @@ func TestTernaryWithLazyEvaluation(t *testing.T) {
 		expected := parameters[i].expected
 
 		t.Run(fmt.Sprintf("() => %d if %t else () => %d", trueResult, condition, falseResult), func(t *testing.T) {
-			trueFunc := &function[int]{result: trueResult}
-			falseFunc := &function[int]{result: falseResult}
-
-			actual := Call(trueFunc.Invoke).When(condition).ElseCall(falseFunc.Invoke)
-			if actual != expected {
-				t.Errorf("expected: %d, actual: %d", expected, actual)
-			}
-
-			if condition {
-				if trueFunc.invoked != 1 {
-					t.Errorf("expected true func to be invoked once, actual: %d", trueFunc.invoked)
-				}
-
-				if falseFunc.invoked != 0 {
-					t.Errorf("expected false func to not be invoked, actual: %d", falseFunc.invoked)
-				}
-			} else {
-				if trueFunc.invoked != 0 {
-					t.Errorf("expected true func to not be invoked, actual: %d", trueFunc.invoked)
-				}
-
-				if falseFunc.invoked != 1 {
-					t.Errorf("expected false func to be invoked once, actual: %d", falseFunc.invoked)
-				}
-			}
+			testTernaryWithLazyEvaluation(t, condition, trueResult, falseResult, expected)
 		})
+	}
+}
+
+func testTernaryWithLazyEvaluation(t *testing.T, condition bool, trueResult int, falseResult int, expected int) {
+	t.Helper()
+
+	trueFunc := &function[int]{result: trueResult}
+	falseFunc := &function[int]{result: falseResult}
+
+	actual := Call(trueFunc.Invoke).When(condition).ElseCall(falseFunc.Invoke)
+	if actual != expected {
+		t.Errorf("expected: %d, actual: %d", expected, actual)
+	}
+
+	if condition {
+		if trueFunc.invoked != 1 {
+			t.Errorf("expected true func to be invoked once, actual: %d", trueFunc.invoked)
+		}
+
+		if falseFunc.invoked != 0 {
+			t.Errorf("expected false func to not be invoked, actual: %d", falseFunc.invoked)
+		}
+	} else {
+		if trueFunc.invoked != 0 {
+			t.Errorf("expected true func to not be invoked, actual: %d", trueFunc.invoked)
+		}
+
+		if falseFunc.invoked != 1 {
+			t.Errorf("expected false func to be invoked once, actual: %d", falseFunc.invoked)
+		}
 	}
 }
 
@@ -93,21 +99,27 @@ func TestTernaryWithLazyTrueEvaluation(t *testing.T) {
 		expected := parameters[i].expected
 
 		t.Run(fmt.Sprintf("() => %d if %t else %d", trueResult, condition, falseResult), func(t *testing.T) {
-			trueFunc := &function[int]{result: trueResult}
-
-			actual := Call(trueFunc.Invoke).When(condition).Else(falseResult)
-			if actual != expected {
-				t.Errorf("expected: %d, actual: %d", expected, actual)
-			}
-
-			if condition && trueFunc.invoked != 1 {
-				t.Errorf("expected true func to be invoked once, actual: %d", trueFunc.invoked)
-			}
-
-			if !condition && trueFunc.invoked != 0 {
-				t.Errorf("expected true func to not be invoked, actual: %d", trueFunc.invoked)
-			}
+			testTernaryWithLazyTrueEvaluation(t, condition, trueResult, falseResult, expected)
 		})
+	}
+}
+
+func testTernaryWithLazyTrueEvaluation(t *testing.T, condition bool, trueResult int, falseResult int, expected int) {
+	t.Helper()
+
+	trueFunc := &function[int]{result: trueResult}
+
+	actual := Call(trueFunc.Invoke).When(condition).Else(falseResult)
+	if actual != expected {
+		t.Errorf("expected: %d, actual: %d", expected, actual)
+	}
+
+	if condition && trueFunc.invoked != 1 {
+		t.Errorf("expected true func to be invoked once, actual: %d", trueFunc.invoked)
+	}
+
+	if !condition && trueFunc.invoked != 0 {
+		t.Errorf("expected true func to not be invoked, actual: %d", trueFunc.invoked)
 	}
 }
 
@@ -128,21 +140,27 @@ func TestTernaryWithLazyFalseEvaluation(t *testing.T) {
 		expected := parameters[i].expected
 
 		t.Run(fmt.Sprintf("%d if %t else () => %d", trueResult, condition, falseResult), func(t *testing.T) {
-			falseFunc := &function[int]{result: falseResult}
-
-			actual := Return(trueResult).When(condition).ElseCall(falseFunc.Invoke)
-			if actual != expected {
-				t.Errorf("expected: %d, actual: %d", expected, actual)
-			}
-
-			if condition && falseFunc.invoked != 0 {
-				t.Errorf("expected false func to not be invoked, actual: %d", falseFunc.invoked)
-			}
-
-			if !condition && falseFunc.invoked != 1 {
-				t.Errorf("expected false func to be invoked once, actual: %d", falseFunc.invoked)
-			}
+			testTernaryWithLazyFalseEvaluation(t, condition, trueResult, falseResult, expected)
 		})
+	}
+}
+
+func testTernaryWithLazyFalseEvaluation(t *testing.T, condition bool, trueResult int, falseResult int, expected int) {
+	t.Helper()
+
+	falseFunc := &function[int]{result: falseResult}
+
+	actual := Return(trueResult).When(condition).ElseCall(falseFunc.Invoke)
+	if actual != expected {
+		t.Errorf("expected: %d, actual: %d", expected, actual)
+	}
+
+	if condition && falseFunc.invoked != 0 {
+		t.Errorf("expected false func to not be invoked, actual: %d", falseFunc.invoked)
+	}
+
+	if !condition && falseFunc.invoked != 1 {
+		t.Errorf("expected false func to be invoked once, actual: %d", falseFunc.invoked)
 	}
 }
 
